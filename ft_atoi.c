@@ -12,11 +12,11 @@
 
 #include "philo.h"
 
-int	ft_atoi(const char *str)
+long	ft_atoi(const char *str)
 {
-	int	res;
-	int	sign;
-	int	i;
+	long	res;
+	int		sign;
+	int		i;
 
 	i = 0;
 	res = 0;
@@ -32,6 +32,8 @@ int	ft_atoi(const char *str)
 	while (str[i] >= '0' && str[i] <= '9')
 	{
 		res = res * 10 + (str[i] - '0');
+		if ((res * sign > INT_MAX || res * sign < INT_MIN))
+			return (-1);
 		i++;
 	}
 	return (res * sign);
