@@ -6,13 +6,13 @@
 /*   By: htalhaou <htalhaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/09 00:40:35 by htalhaou          #+#    #+#             */
-/*   Updated: 2023/05/17 19:23:39 by htalhaou         ###   ########.fr       */
+/*   Updated: 2023/05/18 13:24:32 by htalhaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int	init_philo(t_philo *philo, char **argv)
+int	init_philo(t_moad *moad, char **argv)
 {
 	int	i;
 	int	var2;
@@ -27,13 +27,18 @@ int	init_philo(t_philo *philo, char **argv)
 		printf("error\n");
 		return (1);
 	}
+	moad->nb_philo = ft_atoi(argv[1]);
+	moad->time_to_die = var2;
+	moad->time_to_eat = var3;
+	moad->time_to_sleep = var4;
 	i = 0;
-	while (i < ft_atoi(argv[1]))
+	while (i < moad->nb_philo)
 	{
-		philo[i].id = i + 1;
-		philo[i].time_to_die = ft_atoi(argv[2]);
-		philo[i].time_to_eat = ft_atoi(argv[3]);
-		philo[i].time_to_sleep = ft_atoi(argv[4]);
+		moad->philos[i].id = i + 1;
+		moad->philos[i].left_fork = i;
+		moad->philos[i].right_fork = (i + 1) % moad->nb_philo;
+		moad->philos[i].last_eat = 0; // get_time();
+		moad->philos[i].moad = moad;
 		i++;
 	}
 	return (0);
@@ -47,12 +52,13 @@ void	*philo_routine(void	*philo)
 	printf("philo %d is thinking\n", ph->id);
 	printf("philo %d is eating\n", ph->id);
 	printf("philo %d is sleeping\n", ph->id);
+	printf("philo %d is died\n", ph->id);
 	return (NULL);
 }
 
 int	main(int argc, char **argv)
 {
-	t_philo	*philo;
+	t_moad	moad;
 	int		i;
 	int		var;
 
@@ -64,10 +70,10 @@ int	main(int argc, char **argv)
 	}
 	if (argc < 5 || argc > 6)
 		return (1);
-	philo = malloc(sizeof(t_philo) * var);
-	if (!philo)
+	moad.philos = malloc(sizeof(t_philo) * var);
+	if (!moad.philos)
 		return (1);
-	if (init_philo(philo, argv) || check_for_int(argv))
+	if (init_philo(&moad, argv) || check_for_int(argv))
 	{
 		printf("error\n");
 		return (1);
@@ -75,13 +81,14 @@ int	main(int argc, char **argv)
 	i = 0;
 	while (i < var)
 	{
-		pthread_create(&(philo[i].thread), NULL, philo_routine, &philo[i]);
+		pthread_create(&(moad.philos[i].thread), NULL, \
+		philo_routine, &moad.philos[i]);
 		i++;
 	}
 	i = 0;
 	while (i < var)
 	{
-		pthread_join(philo[i].thread, NULL);
+		pthread_join(moad.philos[i].thread, NULL);
 		i++;
 	}
 	return (0);
