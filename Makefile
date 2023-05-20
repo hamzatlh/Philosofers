@@ -6,7 +6,7 @@
 #    By: htalhaou <htalhaou@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/09 00:40:00 by htalhaou          #+#    #+#              #
-#    Updated: 2023/05/17 18:21:56 by htalhaou         ###   ########.fr        #
+#    Updated: 2023/05/19 14:34:04 by htalhaou         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,9 @@ SRCS =  philo.c \
 NAME = philo
 
 CC = gcc
+
 CFLAGS = -Wall -Wextra -Werror
+
 RM = rm -f
 
 OBJS = $(SRCS:.c=.o)

@@ -6,7 +6,7 @@
 /*   By: htalhaou <htalhaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/09 00:43:42 by htalhaou          #+#    #+#             */
-/*   Updated: 2023/05/18 17:35:08 by htalhaou         ###   ########.fr       */
+/*   Updated: 2023/05/20 21:52:43 by htalhaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,9 @@ typedef struct s_infos
 	long			time_to_die;
 	long			time_to_eat;
 	long			time_to_sleep;
+	int				is_died;
 	pthread_mutex_t	*forks;
+	pthread_mutex_t	print;
 	struct s_philo	*philos;
 }	t_infos;
 
@@ -47,5 +49,7 @@ void		*philo_routine(void	*philo);
 int			init_philo(t_infos *infos, char **argv);
 int			check_for_int(char **arg);
 long		ft_atoi(const char *str);
+void		mine_usleep(long long time);
+int			is_died(t_philo *ph);
 
 #endif
