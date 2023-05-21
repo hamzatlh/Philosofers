@@ -6,14 +6,15 @@
 #    By: htalhaou <htalhaou@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/09 00:40:00 by htalhaou          #+#    #+#              #
-#    Updated: 2023/05/19 14:34:04 by htalhaou         ###   ########.fr        #
+#    Updated: 2023/05/21 19:24:09 by htalhaou         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 SRCS =  philo.c \
 		utils.c \
 		ft_atoi.c \
-		check_arg.c
+		check_arg.c \
+		utils_2.c
 
 NAME = philo
 
