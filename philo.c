@@ -6,7 +6,7 @@
 /*   By: htalhaou <htalhaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/09 00:40:35 by htalhaou          #+#    #+#             */
-/*   Updated: 2023/05/21 20:27:26 by htalhaou         ###   ########.fr       */
+/*   Updated: 2023/05/30 17:25:44 by htalhaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,21 +26,28 @@ void	*philo_routine(void *philo)
 {
 	t_philo		*ph;
 	t_infos		*infos;
+	int			var;
 
 	ph = (t_philo *)philo;
 	infos = ph->infos;
-	while (*infos->di)
+	var = *infos->di;
+	while (var)
 	{
 		print_msg(ph, "is thinking");
 		pthread_mutex_lock(&(infos->forks[ph->left_fork]));
 		pthread_mutex_lock(&(infos->forks[ph->right_fork]));
 		print_msg(ph, "is eating");
+		pthread_mutex_lock((infos->print));
 		ph->last_eat = get_time();
+		pthread_mutex_unlock((infos->print));
 		mine_usleep(ph->infos->time_to_eat);
 		pthread_mutex_unlock(&(infos->forks[ph->left_fork]));
 		pthread_mutex_unlock(&(infos->forks[ph->right_fork]));
 		print_msg(ph, "is sleeping");
 		mine_usleep(ph->infos->time_to_sleep);
+		pthread_mutex_lock(&(infos->die));
+		var = *infos->di;
+		pthread_mutex_unlock(&(infos->die));
 	}
 	return (NULL);
 }
@@ -59,7 +66,11 @@ int	initialize_resources(t_infos *infos, int argc, char **argv, int *died)
 	i = 0;
 	while (i < ft_atoi(argv[1]))
 		pthread_mutex_init(&(infos->forks[i++]), NULL);
-	pthread_mutex_init(&(infos->print), NULL);
+	infos->print = malloc(sizeof(pthread_mutex_t) * 1);
+	if (!infos->print)
+		return (1);
+	pthread_mutex_init(infos->print, NULL);
+	pthread_mutex_init(&(infos->die), NULL);
 	infos->philos = malloc(sizeof(t_philo) * ft_atoi(argv[1]));
 	if (!infos->philos)
 		return (1);
