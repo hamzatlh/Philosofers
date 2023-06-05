@@ -6,7 +6,7 @@
 /*   By: htalhaou <htalhaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/21 19:23:09 by htalhaou          #+#    #+#             */
-/*   Updated: 2023/05/30 19:49:04 by htalhaou         ###   ########.fr       */
+/*   Updated: 2023/06/05 15:10:47 by htalhaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,10 @@ int	check_and_set_values(t_infos *infos, char **argv)
 	infos->time_to_die = ft_atoi(argv[2]);
 	infos->time_to_eat = ft_atoi(argv[3]);
 	infos->time_to_sleep = ft_atoi(argv[4]);
+	if (argv[5])
+		infos->nb_of_eat = ft_atoi(argv[5]);
+	else
+		infos->nb_of_eat = -1;
 	return (0);
 }
 
@@ -32,10 +36,13 @@ int	init_philosophers(t_infos *infos, long long time, int *died)
 	int	i;
 
 	i = 0;
+	time = get_time();
+	infos->fin_2 = 0;
 	while (i < infos->nb_philo)
 	{
 		infos->philos[i].id = i + 1;
 		infos->di = died;
+		infos->philos[i].fin = 0;
 		infos->philos[i].left_fork = i;
 		infos->philos[i].right_fork = (i + 1) % infos->nb_philo;
 		infos->philos[i].last_eat = time;
@@ -45,3 +52,32 @@ int	init_philosophers(t_infos *infos, long long time, int *died)
 	}
 	return (0);
 }
+
+int	init_philo(t_infos *infos, char **argv, int *died)
+{
+	long long	time;
+
+	time = get_time();
+	if (check_and_set_values(infos, argv) == 1)
+		return (1);
+	return (init_philosophers(infos, time, died));
+}
+
+// int	check_dead(t_infos *infos)
+// {
+// 	int	i;
+
+// 	i = 0;
+// 	while (i < infos->nb_philo)
+// 	{
+// 		if (is_died(&infos->philos[i]))
+// 			break ;
+// 		if (check_is_fin(&infos->philos[i]) == infos->nb_philo)
+// 		{
+// 			infos->fin_2 = 1;
+// 			break ;
+// 		}
+// 		i = (i + 1) % infos->nb_philo;
+// 	}
+// 	return (0);
+// }
