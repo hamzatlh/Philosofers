@@ -6,7 +6,7 @@
 /*   By: htalhaou <htalhaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/09 00:43:42 by htalhaou          #+#    #+#             */
-/*   Updated: 2023/06/05 14:40:22 by htalhaou         ###   ########.fr       */
+/*   Updated: 2023/06/05 19:37:14 by htalhaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,6 @@ void		print_msg(t_philo *ph, char *str);
 int			check_and_set_values(t_infos *infos, char **argv);
 int			check_is_fin(t_philo *ph);
 int			init_philosophers(t_infos *infos, long long time, int *died);
-int			check_dead(t_infos *infos);
+void		check_dead(t_infos *infos);
 
 #endif

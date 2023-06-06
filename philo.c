@@ -6,7 +6,7 @@
 /*   By: htalhaou <htalhaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/09 00:40:35 by htalhaou          #+#    #+#             */
-/*   Updated: 2023/06/05 15:42:07 by htalhaou         ###   ########.fr       */
+/*   Updated: 2023/06/06 17:41:37 by htalhaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,32 +56,26 @@ void	*philo_routine(void *philo)
 		is_eating(ph);
 		print_msg(ph, "is sleeping");
 		mine_usleep(ph->infos->time_to_sleep, ph);
-		// pthread_mutex_lock(&ph->infos->print);
+		pthread_mutex_lock(&ph->infos->print);
 		var = *infos->di;
-		// pthread_mutex_unlock(&ph->infos->print);
+		pthread_mutex_unlock(&ph->infos->print);
 	}
 	return (NULL);
 }
 
-int	initialize_resources(t_infos *infos, int argc, char **argv, int *died)
+int	initialize_resources(t_infos *infos, char **argv, int *died)
 {
 	int	i;
 
 	if (ft_atoi(argv[1]) < 0)
 		return (printf("error\n"), 1);
-	if (argc < 5 || argc > 6)
-		return (1);
 	infos->forks = malloc(sizeof(pthread_mutex_t) * ft_atoi(argv[1]));
 	if (!infos->forks)
 		return (1);
 	i = 0;
 	while (i < ft_atoi(argv[1]))
 		pthread_mutex_init(&(infos->forks[i++]), NULL);
-	// infos->print = malloc(sizeof(pthread_mutex_t) * 1);
-	// if (!infos->print)
-	// 	return (1);
 	pthread_mutex_init(&infos->print, NULL);
-	// pthread_mutex_init(&(infos->die), NULL);
 	infos->philos = malloc(sizeof(t_philo) * ft_atoi(argv[1]));
 	if (!infos->philos)
 		return (1);
@@ -103,18 +97,11 @@ int	start_philosophers(t_infos *infos, char **argv)
 		i++;
 	}
 	i = 0;
-	while (i < infos->nb_philo)
+	check_dead(infos);
+	while (i < ft_atoi(argv[1]))
 	{
-		if (is_died(&infos->philos[i]))
-			break ;
-		if (check_is_fin(&infos->philos[i]) == infos->nb_philo)
-		{
-			pthread_mutex_lock(&infos->print);
-			infos->fin_2 = 1;
-			pthread_mutex_unlock(&infos->print);
-			break ;
-		}
-		i = (i + 1) % infos->nb_philo;
+		pthread_mutex_destroy(&(infos->forks[i]));
+		i++;
 	}
 	i = 0;
 	while (i < ft_atoi(argv[1]))
@@ -131,7 +118,9 @@ int	main(int argc, char **argv)
 	int		died;
 
 	died = 1;
-	if (initialize_resources(&infos, argc, argv, &died))
+	if (argc < 5 || argc > 6)
+		return (printf("error\n"), 1);
+	if (initialize_resources(&infos, argv, &died))
 		return (1);
 	return (start_philosophers(&infos, argv));
 }

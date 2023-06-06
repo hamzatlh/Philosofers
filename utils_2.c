@@ -6,7 +6,7 @@
 /*   By: htalhaou <htalhaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/21 19:23:09 by htalhaou          #+#    #+#             */
-/*   Updated: 2023/06/05 15:10:47 by htalhaou         ###   ########.fr       */
+/*   Updated: 2023/06/05 17:33:00 by htalhaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,21 +63,22 @@ int	init_philo(t_infos *infos, char **argv, int *died)
 	return (init_philosophers(infos, time, died));
 }
 
-// int	check_dead(t_infos *infos)
-// {
-// 	int	i;
+void	check_dead(t_infos *infos)
+{
+	int	i;
 
-// 	i = 0;
-// 	while (i < infos->nb_philo)
-// 	{
-// 		if (is_died(&infos->philos[i]))
-// 			break ;
-// 		if (check_is_fin(&infos->philos[i]) == infos->nb_philo)
-// 		{
-// 			infos->fin_2 = 1;
-// 			break ;
-// 		}
-// 		i = (i + 1) % infos->nb_philo;
-// 	}
-// 	return (0);
-// }
+	i = 0;
+	while (i < infos->nb_philo)
+	{
+		if (is_died(&infos->philos[i]))
+			break ;
+		if (check_is_fin(&infos->philos[i]) == infos->nb_philo)
+		{
+			pthread_mutex_lock(&infos->print);
+			infos->fin_2 = 1;
+			pthread_mutex_unlock(&infos->print);
+			break ;
+		}
+		i = (i + 1) % infos->nb_philo;
+	}
+}

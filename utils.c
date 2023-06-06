@@ -6,7 +6,7 @@
 /*   By: htalhaou <htalhaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 22:19:38 by htalhaou          #+#    #+#             */
-/*   Updated: 2023/06/05 15:21:18 by htalhaou         ###   ########.fr       */
+/*   Updated: 2023/06/05 17:34:09 by htalhaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void	mine_usleep(long long time, t_philo	*ph)
 int	is_died(t_philo *ph)
 {
 	int			i;
-	long long			var;
+	long long	var;
 
 	pthread_mutex_lock(&ph->infos->print);
 	var = get_time() - ph->last_eat;
