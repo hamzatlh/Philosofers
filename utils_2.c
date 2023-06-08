@@ -6,7 +6,7 @@
 /*   By: htalhaou <htalhaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/21 19:23:09 by htalhaou          #+#    #+#             */
-/*   Updated: 2023/06/05 17:33:00 by htalhaou         ###   ########.fr       */
+/*   Updated: 2023/06/08 16:33:38 by htalhaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,7 @@ int	check_and_set_values(t_infos *infos, char **argv)
 {
 	if (ft_atoi(argv[2]) < 0 || ft_atoi(argv[3]) < 0 \
 	|| ft_atoi(argv[4]) < 0 || ft_atoi(argv[1]) < 0)
-	{
-		printf("error\n");
 		return (1);
-	}
 	infos->nb_philo = ft_atoi(argv[1]);
 	infos->time_to_die = ft_atoi(argv[2]);
 	infos->time_to_eat = ft_atoi(argv[3]);

@@ -6,7 +6,7 @@
 /*   By: htalhaou <htalhaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/09 00:40:35 by htalhaou          #+#    #+#             */
-/*   Updated: 2023/06/07 18:57:53 by htalhaou         ###   ########.fr       */
+/*   Updated: 2023/06/08 16:36:39 by htalhaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,11 @@ int	initialize_resources(t_infos *infos, char **argv, int *died)
 	if (!infos->philos)
 		return (1);
 	if (init_philo(infos, argv, died) || check_for_int(argv))
+	{
+		free(infos->philos);
+		free(infos->forks);
 		return (printf("error\n"), 1);
+	}
 	return (0);
 }
 
@@ -109,6 +113,8 @@ int	start_philosophers(t_infos *infos, char **argv)
 		pthread_join(infos->philos[i].thread, NULL);
 		i++;
 	}
+	free(infos->philos);
+	free(infos->forks);
 	return (0);
 }
 
