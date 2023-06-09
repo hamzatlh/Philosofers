@@ -6,7 +6,7 @@
 /*   By: htalhaou <htalhaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/21 19:23:09 by htalhaou          #+#    #+#             */
-/*   Updated: 2023/06/08 16:33:38 by htalhaou         ###   ########.fr       */
+/*   Updated: 2023/06/09 16:35:53 by htalhaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,9 +71,9 @@ void	check_dead(t_infos *infos)
 			break ;
 		if (check_is_fin(&infos->philos[i]) == infos->nb_philo)
 		{
-			pthread_mutex_lock(&infos->print);
+			pthread_mutex_lock(&infos->control);
 			infos->fin_2 = 1;
-			pthread_mutex_unlock(&infos->print);
+			pthread_mutex_unlock(&infos->control);
 			break ;
 		}
 		i = (i + 1) % infos->nb_philo;

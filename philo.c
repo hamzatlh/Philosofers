@@ -6,7 +6,7 @@
 /*   By: htalhaou <htalhaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/09 00:40:35 by htalhaou          #+#    #+#             */
-/*   Updated: 2023/06/08 16:44:46 by htalhaou         ###   ########.fr       */
+/*   Updated: 2023/06/09 16:41:29 by htalhaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,17 +19,19 @@ void	is_eating(t_philo *ph)
 	pthread_mutex_lock(&(ph->infos->forks[ph->right_fork]));
 	print_msg(ph, "has taken a fork");
 	print_msg(ph, "is eating");
-	pthread_mutex_lock(&ph->infos->print);
+	pthread_mutex_lock(&ph->infos->control);
 	ph->last_eat = get_time();
-	pthread_mutex_unlock(&ph->infos->print);
+	pthread_mutex_unlock(&ph->infos->control);
 	ph->count_meals++;
 	mine_usleep(ph->infos->time_to_eat, ph);
+	pthread_mutex_lock(&ph->infos->control);
 	if (ph->count_meals >= ph->infos->nb_of_eat && ph->infos->nb_of_eat != -1)
 	{
-		pthread_mutex_lock(&ph->infos->print);
+		// pthread_mutex_lock(&ph->infos->control);
 		ph->fin = 1;
-		pthread_mutex_unlock(&ph->infos->print);
+		// pthread_mutex_unlock(&ph->infos->control);
 	}
+	pthread_mutex_unlock(&ph->infos->control);
 	pthread_mutex_unlock(&(ph->infos->forks[ph->left_fork]));
 	pthread_mutex_unlock(&(ph->infos->forks[ph->right_fork]));
 }
@@ -43,22 +45,25 @@ void	*philo_routine(void *philo)
 	ph = (t_philo *)philo;
 	infos = ph->infos;
 	var = *infos->di;
+	if (ph->id % 2 == 0)
+		usleep(200);
 	while (var)
 	{
-		pthread_mutex_lock(&ph->infos->print);
-		if (infos->fin_2 == 1)
-		{
-			pthread_mutex_unlock(&ph->infos->print);
-			break ;
-		}
-		pthread_mutex_unlock(&ph->infos->print);
 		print_msg(ph, "is thinking");
 		is_eating(ph);
 		print_msg(ph, "is sleeping");
 		mine_usleep(ph->infos->time_to_sleep, ph);
-		pthread_mutex_lock(&ph->infos->print);
+		pthread_mutex_lock(&ph->infos->control);
+		if (infos->fin_2 == 1)
+		{
+			pthread_mutex_unlock(&ph->infos->control);
+			// print_msg(ph, "is thinking");
+			break ;
+		}
+		pthread_mutex_unlock(&ph->infos->control);
+		pthread_mutex_lock(&ph->infos->control);
 		var = *infos->di;
-		pthread_mutex_unlock(&ph->infos->print);
+		pthread_mutex_unlock(&ph->infos->control);
 	}
 	return (NULL);
 }
@@ -76,6 +81,7 @@ int	initialize_resources(t_infos *infos, char **argv, int *died)
 	while (i < ft_atoi(argv[1]))
 		pthread_mutex_init(&(infos->forks[i++]), NULL);
 	pthread_mutex_init(&infos->print, NULL);
+	pthread_mutex_init(&infos->control, NULL);
 	infos->philos = malloc(sizeof(t_philo) * ft_atoi(argv[1]));
 	if (!infos->philos)
 		return (1);

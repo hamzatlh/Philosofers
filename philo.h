@@ -6,7 +6,7 @@
 /*   By: htalhaou <htalhaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/09 00:43:42 by htalhaou          #+#    #+#             */
-/*   Updated: 2023/06/08 16:44:07 by htalhaou         ###   ########.fr       */
+/*   Updated: 2023/06/09 16:28:37 by htalhaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ typedef struct s_infos
 	int				*di;
 	pthread_mutex_t	*forks;
 	pthread_mutex_t	print;
+	pthread_mutex_t control;
 	struct s_philo	*philos;
 }	t_infos;
 
