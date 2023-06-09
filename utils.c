@@ -6,7 +6,7 @@
 /*   By: htalhaou <htalhaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 22:19:38 by htalhaou          #+#    #+#             */
-/*   Updated: 2023/06/09 16:45:23 by htalhaou         ###   ########.fr       */
+/*   Updated: 2023/06/09 19:48:06 by htalhaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	mine_usleep(long long time, t_philo	*ph)
 		if (ph->infos->fin_2 == 1)
 		{
 			pthread_mutex_unlock(&ph->infos->control);
-			break; 
+			break ;
 		}
 		pthread_mutex_unlock(&ph->infos->control);
 		pthread_mutex_lock(&ph->infos->control);

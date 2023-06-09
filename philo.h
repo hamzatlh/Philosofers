@@ -6,7 +6,7 @@
 /*   By: htalhaou <htalhaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/09 00:43:42 by htalhaou          #+#    #+#             */
-/*   Updated: 2023/06/09 16:28:37 by htalhaou         ###   ########.fr       */
+/*   Updated: 2023/06/09 19:50:28 by htalhaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ typedef struct s_infos
 	int				*di;
 	pthread_mutex_t	*forks;
 	pthread_mutex_t	print;
-	pthread_mutex_t control;
+	pthread_mutex_t	control;
 	struct s_philo	*philos;
 }	t_infos;
 
@@ -60,5 +60,7 @@ int			check_and_set_values(t_infos *infos, char **argv);
 int			check_is_fin(t_philo *ph);
 int			init_philosophers(t_infos *infos, long long time, int *died);
 void		check_dead(t_infos *infos);
+void		help(t_philo *ph, t_infos *infos, int var);
+void		is_eating(t_philo *ph);
 
 #endif

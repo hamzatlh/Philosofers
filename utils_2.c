@@ -6,7 +6,7 @@
 /*   By: htalhaou <htalhaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/21 19:23:09 by htalhaou          #+#    #+#             */
-/*   Updated: 2023/06/09 16:35:53 by htalhaou         ###   ########.fr       */
+/*   Updated: 2023/06/09 19:49:30 by htalhaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,5 +77,26 @@ void	check_dead(t_infos *infos)
 			break ;
 		}
 		i = (i + 1) % infos->nb_philo;
+	}
+}
+
+void	help(t_philo *ph, t_infos *infos, int var)
+{
+	while (var)
+	{
+		print_msg(ph, "is thinking");
+		is_eating(ph);
+		print_msg(ph, "is sleeping");
+		mine_usleep(ph->infos->time_to_sleep, ph);
+		pthread_mutex_lock(&ph->infos->control);
+		if (infos->fin_2 == 1)
+		{
+			pthread_mutex_unlock(&ph->infos->control);
+			break ;
+		}
+		pthread_mutex_unlock(&ph->infos->control);
+		pthread_mutex_lock(&ph->infos->control);
+		var = *infos->di;
+		pthread_mutex_unlock(&ph->infos->control);
 	}
 }

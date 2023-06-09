@@ -6,7 +6,7 @@
 /*   By: htalhaou <htalhaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/09 00:40:35 by htalhaou          #+#    #+#             */
-/*   Updated: 2023/06/09 16:41:29 by htalhaou         ###   ########.fr       */
+/*   Updated: 2023/06/09 19:50:08 by htalhaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,7 @@ void	is_eating(t_philo *ph)
 	mine_usleep(ph->infos->time_to_eat, ph);
 	pthread_mutex_lock(&ph->infos->control);
 	if (ph->count_meals >= ph->infos->nb_of_eat && ph->infos->nb_of_eat != -1)
-	{
-		// pthread_mutex_lock(&ph->infos->control);
 		ph->fin = 1;
-		// pthread_mutex_unlock(&ph->infos->control);
-	}
 	pthread_mutex_unlock(&ph->infos->control);
 	pthread_mutex_unlock(&(ph->infos->forks[ph->left_fork]));
 	pthread_mutex_unlock(&(ph->infos->forks[ph->right_fork]));
@@ -47,24 +43,7 @@ void	*philo_routine(void *philo)
 	var = *infos->di;
 	if (ph->id % 2 == 0)
 		usleep(200);
-	while (var)
-	{
-		print_msg(ph, "is thinking");
-		is_eating(ph);
-		print_msg(ph, "is sleeping");
-		mine_usleep(ph->infos->time_to_sleep, ph);
-		pthread_mutex_lock(&ph->infos->control);
-		if (infos->fin_2 == 1)
-		{
-			pthread_mutex_unlock(&ph->infos->control);
-			// print_msg(ph, "is thinking");
-			break ;
-		}
-		pthread_mutex_unlock(&ph->infos->control);
-		pthread_mutex_lock(&ph->infos->control);
-		var = *infos->di;
-		pthread_mutex_unlock(&ph->infos->control);
-	}
+	help(ph, infos, var);
 	return (NULL);
 }
 
