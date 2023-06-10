@@ -6,7 +6,7 @@
 /*   By: htalhaou <htalhaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/09 00:40:35 by htalhaou          #+#    #+#             */
-/*   Updated: 2023/06/09 19:50:08 by htalhaou         ###   ########.fr       */
+/*   Updated: 2023/06/10 17:41:21 by htalhaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,13 +77,13 @@ int	start_philosophers(t_infos *infos, char **argv)
 {
 	int	i;
 
-	i = 0;
-	while (i < ft_atoi(argv[1]))
+	i = -1;
+	while (++i < ft_atoi(argv[1]))
 	{
-		pthread_create(&(infos->philos[i].thread), NULL, \
-		philo_routine, &infos->philos[i]);
+		if (pthread_create(&(infos->philos[i].thread), NULL, \
+		philo_routine, &infos->philos[i]))
+			return (free(infos->philos), free(infos->forks), 1);
 		usleep(10);
-		i++;
 	}
 	i = 0;
 	check_dead(infos);
@@ -95,7 +95,8 @@ int	start_philosophers(t_infos *infos, char **argv)
 	i = 0;
 	while (i < ft_atoi(argv[1]))
 	{
-		pthread_join(infos->philos[i].thread, NULL);
+		if (pthread_join(infos->philos[i].thread, NULL))
+			return (free(infos->philos), free(infos->forks), 1);
 		i++;
 	}
 	return (free(infos->philos), free(infos->forks), 0);
