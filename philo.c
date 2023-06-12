@@ -6,7 +6,7 @@
 /*   By: htalhaou <htalhaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/09 00:40:35 by htalhaou          #+#    #+#             */
-/*   Updated: 2023/06/12 17:36:41 by htalhaou         ###   ########.fr       */
+/*   Updated: 2023/06/12 18:46:35 by htalhaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,14 +79,19 @@ int	start_philosophers(t_infos *infos, char **argv, int *died)
 {
 	int	i;
 
-	i = 0;
-	while (i < ft_atoi(argv[1]))
+	i = -1;
+	while (++i < ft_atoi(argv[1]))
 	{
 		if (pthread_create(&(infos->philos[i].thread), NULL, \
 		philo_routine, &infos->philos[i]))
+<<<<<<< HEAD
 			return (1);
 		usleep(5);
 		i++;
+=======
+			return (free(infos->philos), free(infos->forks), 1);
+		usleep(10);
+>>>>>>> d967886a550015b7cadee2c343df0f81662f4f92
 	}
 	i = 0;
 	check_dead(infos, died);
@@ -98,7 +103,8 @@ int	start_philosophers(t_infos *infos, char **argv, int *died)
 	i = 0;
 	while (i < ft_atoi(argv[1]))
 	{
-		pthread_join(infos->philos[i].thread, NULL);
+		if (pthread_join(infos->philos[i].thread, NULL))
+			return (free(infos->philos), free(infos->forks), 1);
 		i++;
 	}
 	return (free(infos->philos), free(infos->forks), 0);
