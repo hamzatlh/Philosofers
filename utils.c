@@ -6,7 +6,7 @@
 /*   By: htalhaou <htalhaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 22:19:38 by htalhaou          #+#    #+#             */
-/*   Updated: 2023/06/09 19:48:06 by htalhaou         ###   ########.fr       */
+/*   Updated: 2023/06/12 17:40:00 by htalhaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,19 +38,19 @@ void	mine_usleep(long long time, t_philo	*ph)
 		}
 		pthread_mutex_unlock(&ph->infos->control);
 		pthread_mutex_lock(&ph->infos->control);
-		if (*ph->infos->di == 0)
+		if (*ph->di == 0)
 		{
 			pthread_mutex_unlock(&ph->infos->control);
 			break ;
 		}
 		pthread_mutex_unlock(&ph->infos->control);
-		usleep(100);
+		usleep(200);
 	}
 }
 
-int	is_died(t_philo *ph)
+int	is_died(t_philo *ph, int *died)
 {
-	int			i;
+	// int			i;
 	long long	var;
 
 	pthread_mutex_lock(&ph->infos->control);
@@ -59,19 +59,19 @@ int	is_died(t_philo *ph)
 	if (var >= ph->infos->time_to_die)
 	{
 		pthread_mutex_lock(&ph->infos->control);
-		*ph->infos->di = 0;
+		*died = 0;
 		pthread_mutex_unlock(&ph->infos->control);
 		pthread_mutex_lock(&ph->infos->print);
 		printf("%lld %d %s\n", (get_time() - ph->start), ph->id, "died");
 		pthread_mutex_unlock((&ph->infos->print));
 		if (ph->infos->nb_philo == 1)
 			pthread_mutex_unlock(&(ph->infos->forks[ph->left_fork]));
-		i = 0;
-		while (i < ph->infos->nb_philo)
-		{
-			pthread_mutex_unlock(&(ph->infos->forks[i]));
-			i++;
-		}
+		// int i = 0;
+		// while (i < ph->infos->nb_philo)
+		// {
+		// 	pthread_mutex_unlock(&(ph->infos->forks[i]));
+		// 	i++;
+		// }
 		return (1);
 	}
 	return (0);
@@ -79,17 +79,10 @@ int	is_died(t_philo *ph)
 
 void	print_msg(t_philo *ph, char *str)
 {
-	int	var;
-
-	pthread_mutex_lock(&ph->infos->control);
-	var = *ph->infos->di;
-	pthread_mutex_unlock(&ph->infos->control);
-	if (var)
-	{
-		pthread_mutex_lock(&(ph->infos->print));
+	pthread_mutex_lock(&ph->infos->print);
+	if (*ph->di)
 		printf("%lld %d %s\n", (get_time() - ph->start), ph->id, str);
-		pthread_mutex_unlock(&(ph->infos->print));
-	}
+	pthread_mutex_unlock(&(ph->infos->print));
 }
 
 int	check_is_fin(t_philo *ph)

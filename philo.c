@@ -6,7 +6,7 @@
 /*   By: htalhaou <htalhaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/09 00:40:35 by htalhaou          #+#    #+#             */
-/*   Updated: 2023/06/09 19:50:08 by htalhaou         ###   ########.fr       */
+/*   Updated: 2023/06/12 17:36:41 by htalhaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,14 +36,16 @@ void	*philo_routine(void *philo)
 {
 	t_philo		*ph;
 	t_infos		*infos;
-	int			var;
+	// int			var;
 
 	ph = (t_philo *)philo;
 	infos = ph->infos;
-	var = *infos->di;
+	// pthread_mutex_lock(&infos->control);
+	// var = *ph->di;
+	// pthread_mutex_unlock(&infos->control);
 	if (ph->id % 2 == 0)
 		usleep(200);
-	help(ph, infos, var);
+	help(ph, infos);
 	return (NULL);
 }
 
@@ -73,20 +75,21 @@ int	initialize_resources(t_infos *infos, char **argv, int *died)
 	return (0);
 }
 
-int	start_philosophers(t_infos *infos, char **argv)
+int	start_philosophers(t_infos *infos, char **argv, int *died)
 {
 	int	i;
 
 	i = 0;
 	while (i < ft_atoi(argv[1]))
 	{
-		pthread_create(&(infos->philos[i].thread), NULL, \
-		philo_routine, &infos->philos[i]);
-		usleep(10);
+		if (pthread_create(&(infos->philos[i].thread), NULL, \
+		philo_routine, &infos->philos[i]))
+			return (1);
+		usleep(5);
 		i++;
 	}
 	i = 0;
-	check_dead(infos);
+	check_dead(infos, died);
 	while (i < ft_atoi(argv[1]))
 	{
 		pthread_mutex_destroy(&(infos->forks[i]));
@@ -111,5 +114,5 @@ int	main(int argc, char **argv)
 		return (printf("error\n"), 1);
 	if (initialize_resources(&infos, argv, &died))
 		return (1);
-	return (start_philosophers(&infos, argv));
+	return (start_philosophers(&infos, argv, &died));
 }

@@ -6,7 +6,7 @@
 /*   By: htalhaou <htalhaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/09 00:43:42 by htalhaou          #+#    #+#             */
-/*   Updated: 2023/06/09 19:50:28 by htalhaou         ###   ########.fr       */
+/*   Updated: 2023/06/12 17:11:05 by htalhaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ typedef struct s_philo
 	long long		last_eat;
 	long long		start;
 	int				fin;
+	int				*di;
 	pthread_t		thread;
 	struct s_infos	*infos;
 }	t_philo;
@@ -41,7 +42,6 @@ typedef struct s_infos
 	long			time_to_sleep;
 	int				nb_of_eat;
 	int				fin_2;
-	int				*di;
 	pthread_mutex_t	*forks;
 	pthread_mutex_t	print;
 	pthread_mutex_t	control;
@@ -54,13 +54,13 @@ int			init_philo(t_infos *infos, char **argv, int *died);
 int			check_for_int(char **arg);
 long		ft_atoi(const char *str);
 void		mine_usleep(long long time, t_philo	*ph);
-int			is_died(t_philo *ph);
+int			is_died(t_philo *ph, int *died);
 void		print_msg(t_philo *ph, char *str);
 int			check_and_set_values(t_infos *infos, char **argv);
 int			check_is_fin(t_philo *ph);
 int			init_philosophers(t_infos *infos, long long time, int *died);
-void		check_dead(t_infos *infos);
-void		help(t_philo *ph, t_infos *infos, int var);
+void		check_dead(t_infos *infos, int *died);
+void		help(t_philo *ph, t_infos *infos);
 void		is_eating(t_philo *ph);
 
 #endif
