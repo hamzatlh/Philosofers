@@ -6,7 +6,7 @@
 /*   By: htalhaou <htalhaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 22:19:38 by htalhaou          #+#    #+#             */
-/*   Updated: 2023/06/12 17:40:00 by htalhaou         ###   ########.fr       */
+/*   Updated: 2023/06/12 22:43:28 by htalhaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,20 +30,13 @@ void	mine_usleep(long long time, t_philo	*ph)
 	start = get_time();
 	while (get_time() - start < time)
 	{
-		pthread_mutex_lock(&ph->infos->control);
-		if (ph->infos->fin_2 == 1)
+		pthread_mutex_lock(&ph->infos->print);
+		if (*ph->di == 0 || ph->infos->fin_2 == 1)
 		{
-			pthread_mutex_unlock(&ph->infos->control);
+			pthread_mutex_unlock(&ph->infos->print);
 			break ;
 		}
-		pthread_mutex_unlock(&ph->infos->control);
-		pthread_mutex_lock(&ph->infos->control);
-		if (*ph->di == 0)
-		{
-			pthread_mutex_unlock(&ph->infos->control);
-			break ;
-		}
-		pthread_mutex_unlock(&ph->infos->control);
+		pthread_mutex_unlock(&ph->infos->print);
 		usleep(200);
 	}
 }
@@ -51,22 +44,22 @@ void	mine_usleep(long long time, t_philo	*ph)
 int	is_died(t_philo *ph, int *died)
 {
 	// int			i;
-	long long	var;
+	long		var;
 
-	pthread_mutex_lock(&ph->infos->control);
+	pthread_mutex_lock(&ph->infos->print);
 	var = get_time() - ph->last_eat;
-	pthread_mutex_unlock(&ph->infos->control);
+	pthread_mutex_unlock(&ph->infos->print);
 	if (var >= ph->infos->time_to_die)
 	{
-		pthread_mutex_lock(&ph->infos->control);
+		pthread_mutex_lock(&ph->infos->print);
 		*died = 0;
-		pthread_mutex_unlock(&ph->infos->control);
+		pthread_mutex_unlock(&ph->infos->print);
 		pthread_mutex_lock(&ph->infos->print);
 		printf("%lld %d %s\n", (get_time() - ph->start), ph->id, "died");
 		pthread_mutex_unlock((&ph->infos->print));
 		if (ph->infos->nb_philo == 1)
 			pthread_mutex_unlock(&(ph->infos->forks[ph->left_fork]));
-		// int i = 0;
+		// i = 0;
 		// while (i < ph->infos->nb_philo)
 		// {
 		// 	pthread_mutex_unlock(&(ph->infos->forks[i]));
@@ -94,10 +87,10 @@ int	check_is_fin(t_philo *ph)
 	count = 0;
 	while (i < ph->infos->nb_philo)
 	{
-		pthread_mutex_lock(&ph->infos->control);
+		pthread_mutex_lock(&ph->infos->print);
 		if (ph->infos->philos[i].fin == 1)
 			count++;
-		pthread_mutex_unlock(&ph->infos->control);
+		pthread_mutex_unlock(&ph->infos->print);
 		i++;
 	}
 	return (count);

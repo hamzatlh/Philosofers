@@ -6,7 +6,7 @@
 /*   By: htalhaou <htalhaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/21 19:23:09 by htalhaou          #+#    #+#             */
-/*   Updated: 2023/06/12 17:41:39 by htalhaou         ###   ########.fr       */
+/*   Updated: 2023/06/12 22:31:03 by htalhaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,7 @@ int	init_philosophers(t_infos *infos, long long time, int *died)
 	int	i;
 
 	i = 0;
-	(void)time;
-	// time = get_time();
+	time = get_time();
 	infos->fin_2 = 0;
 	while (i < infos->nb_philo)
 	{
@@ -44,8 +43,8 @@ int	init_philosophers(t_infos *infos, long long time, int *died)
 		infos->philos[i].fin = 0;
 		infos->philos[i].left_fork = i;
 		infos->philos[i].right_fork = (i + 1) % infos->nb_philo;
-		infos->philos[i].last_eat = get_time();
-		infos->philos[i].start = get_time();
+		infos->philos[i].last_eat = time;
+		infos->philos[i].start = time;
 		infos->philos[i].infos = infos;
 		i++;
 	}
@@ -69,38 +68,40 @@ void	check_dead(t_infos *infos, int *died)
 	i = 0;
 	while (1)
 	{
-		if (i == infos->nb_philo)
-			i = 0;
 		if (is_died(&infos->philos[i], died))
 			break ;
 		if (check_is_fin(&infos->philos[i]) == infos->nb_philo)
 		{
-			pthread_mutex_lock(&infos->control);
+			pthread_mutex_lock(&infos->print);
 			infos->fin_2 = 1;
-			pthread_mutex_unlock(&infos->control);
+			pthread_mutex_unlock(&infos->print);
 			break ;
 		}
-		i++;
+		i = (i + 1) % infos->nb_philo;
 	}
 }
 
 void	help(t_philo *ph, t_infos *infos)
 {
-	while (*ph->di)
+	while (1)
 	{
+		pthread_mutex_lock(&ph->infos->print);
+		if (*ph->di == 0)
+		{
+			pthread_mutex_unlock(&ph->infos->print);
+			break ;
+		}
+		pthread_mutex_unlock(&ph->infos->print);
 		print_msg(ph, "is thinking");
 		is_eating(ph);
 		print_msg(ph, "is sleeping");
 		mine_usleep(ph->infos->time_to_sleep, ph);
-		pthread_mutex_lock(&ph->infos->control);
+		pthread_mutex_lock(&ph->infos->print);
 		if (infos->fin_2 == 1)
 		{
-			pthread_mutex_unlock(&ph->infos->control);
+			pthread_mutex_unlock(&ph->infos->print);
 			break ;
 		}
-		pthread_mutex_unlock(&ph->infos->control);
-		// pthread_mutex_lock(&ph->infos->control);
-		// var = *ph->di;
-		// pthread_mutex_unlock(&ph->infos->control);
+		pthread_mutex_unlock(&ph->infos->print);
 	}
 }
