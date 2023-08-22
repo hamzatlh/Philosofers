@@ -6,7 +6,7 @@
 /*   By: htalhaou <htalhaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/09 00:40:35 by htalhaou          #+#    #+#             */
-/*   Updated: 2023/06/12 22:43:45 by htalhaou         ###   ########.fr       */
+/*   Updated: 2023/06/13 20:22:25 by htalhaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,6 @@ int	initialize_resources(t_infos *infos, char **argv, int *died)
 	while (i < ft_atoi(argv[1]))
 		pthread_mutex_init(&(infos->forks[i++]), NULL);
 	pthread_mutex_init(&infos->print, NULL);
-	// pthread_mutex_init(&infos->print, NULL);
 	infos->philos = malloc(sizeof(t_philo) * ft_atoi(argv[1]));
 	if (!infos->philos)
 		return (1);
@@ -108,7 +107,9 @@ int	main(int argc, char **argv)
 	died = 1;
 	if (argc < 5 || argc > 6)
 		return (printf("error\n"), 1);
-	if (initialize_resources(&infos, argv, &died))
+	if (initialize_resources(&infos, argv, &died)){
 		return (1);
+	}
+		
 	return (start_philosophers(&infos, argv, &died));
 }

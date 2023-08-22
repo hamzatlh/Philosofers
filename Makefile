@@ -6,7 +6,7 @@
 #    By: htalhaou <htalhaou@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/09 00:40:00 by htalhaou          #+#    #+#              #
-#    Updated: 2023/06/12 22:39:49 by htalhaou         ###   ########.fr        #
+#    Updated: 2023/06/13 20:22:56 by htalhaou         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,7 @@ NAME = philo
 
 CC = gcc
 
-CFLAGS = -Wall -Wextra -Werror #-fsanitize=thread -g
+CFLAGS = -fsanitize=thread -g -Wall -Wextra -Werror
 
 RM = rm -f
 

@@ -6,7 +6,7 @@
 /*   By: htalhaou <htalhaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 22:19:38 by htalhaou          #+#    #+#             */
-/*   Updated: 2023/06/12 22:43:28 by htalhaou         ###   ########.fr       */
+/*   Updated: 2023/06/13 17:46:56 by htalhaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,6 @@ void	mine_usleep(long long time, t_philo	*ph)
 
 int	is_died(t_philo *ph, int *died)
 {
-	// int			i;
 	long		var;
 
 	pthread_mutex_lock(&ph->infos->print);
@@ -59,12 +58,6 @@ int	is_died(t_philo *ph, int *died)
 		pthread_mutex_unlock((&ph->infos->print));
 		if (ph->infos->nb_philo == 1)
 			pthread_mutex_unlock(&(ph->infos->forks[ph->left_fork]));
-		// i = 0;
-		// while (i < ph->infos->nb_philo)
-		// {
-		// 	pthread_mutex_unlock(&(ph->infos->forks[i]));
-		// 	i++;
-		// }
 		return (1);
 	}
 	return (0);
